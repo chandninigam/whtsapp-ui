@@ -11,7 +11,11 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather as Icon } from "@expo/vector-icons";
+import {
+  Feather as Icon,
+  MaterialIcons as SecondIcon,
+  MaterialCommunityIcons as ThirdIcon,
+} from "@expo/vector-icons";
 import colors from "./src/color.js";
 import color from "./src/color.js";
 
@@ -21,12 +25,7 @@ const width = Dimensions.get("window").width;
 export default function App() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
-  // const [routes] = useState([
-  //   { key: "community", title: "" },
-  //   { key: "chat", title: "Chats" },
-  //   { key: "update", title: "Updates" },
-  //   { key: "call", title: "Calls" },
-  // ]);
+
   return (
     <View
       style={{
@@ -85,44 +84,75 @@ const RenderTabBar = (props) => {
 
   return (
     <NavigationContainer>
-      <BottomNavigator.Navigator>
+      <BottomNavigator.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: colors.mainBackgroundColor,
+          },
+          tabBarActiveTintColor: "white",
+        }}
+      >
         <BottomNavigator.Screen
-          name="Chat"
+          name="Chats"
           component={ChatRoute}
-          option={{
-            tabBarShowLabel: true,
-            tabBarIcon: ({ size }) => {
-              return <Icon name="message-square" size={20} />;
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="chat"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
             },
           }}
         />
         <BottomNavigator.Screen
           name="Updates"
           component={UpdateRoute}
-          option={{
-            tabBarShowLabel: false,
-            tabBarIcon: ({ size }) => {
-              return <Icon name="message-square" size={20} />;
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="update"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
             },
           }}
         />
         <BottomNavigator.Screen
           name="Communities"
           component={CommunityRoute}
-          option={{
+          options={{
             headerShown: false,
-            tabBarIcon: ({ size }) => {
-              return <Icon name="message-circle" size={20} />;
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <ThirdIcon
+                  name="account-multiple"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
             },
           }}
         />
         <BottomNavigator.Screen
-          name="Call"
+          name="Calls"
           component={CallRoute}
-          option={{
+          options={{
             headerShown: false,
-            tabBarIcon: ({ size }) => {
-              return <Icon name="message-circle" size={20} />;
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="call"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
             },
           }}
         />
