@@ -9,25 +9,23 @@ import {
   StatusBarStyle,
   Dimensions,
 } from "react-native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { Feather as Icon } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  Feather as Icon,
+  MaterialIcons as SecondIcon,
+  MaterialCommunityIcons as ThirdIcon,
+} from "@expo/vector-icons";
 import colors from "./src/color.js";
 import color from "./src/color.js";
 
-const Tab = createMaterialTopTabNavigator();
+const BottomNavigator = createBottomTabNavigator();
 const width = Dimensions.get("window").width;
 
 export default function App() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "community", title: "" },
-    { key: "chat", title: "Chats" },
-    { key: "update", title: "Updates" },
-    { key: "call", title: "Calls" },
-  ]);
+
   return (
     <View
       style={{
@@ -76,64 +74,90 @@ export default function App() {
           />
         </View>
       </View>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        renderTabBar={renderTabBar}
-      />
+      <RenderTabBar />
     </View>
   );
 }
 
-const renderTabBar = (props) => {
+const RenderTabBar = (props) => {
   const layout = useWindowDimensions();
 
   return (
-    <TabBar
-      {...props}
-      style={{
-        backgroundColor: colors.mainBackgroundColor,
-        fontSize: 14,
-        fontWeight: "400",
-        paddingLeft: 8,
-      }}
-      renderTabBarItem={(item) => {
-        console.log("item----->", JSON.stringify(item));
-        if (item.route.title === "") {
-          return (
-            <View
-              style={{
-                marginRight: width / 30,
-                justifyContent: "center",
-              }}
-            >
-              <Icon name="users" size={20} color={colors.tabTextColor} />
-            </View>
-          );
-        }
-        return (
-          <View
-            style={{
-              width: width / 3.5,
-              padding: 12,
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: colors.tabTextColor,
-                fontSize: 14,
-                fontWeight: "500",
-              }}
-            >
-              {item.route.title}
-            </Text>
-          </View>
-        );
-      }}
-    />
+    <NavigationContainer>
+      <BottomNavigator.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: colors.mainBackgroundColor,
+          },
+          tabBarActiveTintColor: "white",
+        }}
+      >
+        <BottomNavigator.Screen
+          name="Chats"
+          component={ChatRoute}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="chat"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
+            },
+          }}
+        />
+        <BottomNavigator.Screen
+          name="Updates"
+          component={UpdateRoute}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="update"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
+            },
+          }}
+        />
+        <BottomNavigator.Screen
+          name="Communities"
+          component={CommunityRoute}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <ThirdIcon
+                  name="account-multiple"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
+            },
+          }}
+        />
+        <BottomNavigator.Screen
+          name="Calls"
+          component={CallRoute}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, size }) => {
+              return (
+                <SecondIcon
+                  name="call"
+                  size={size}
+                  color={focused ? "white" : `${colors.inactiveTab}`}
+                />
+              );
+            },
+          }}
+        />
+      </BottomNavigator.Navigator>
+    </NavigationContainer>
   );
 };
 
@@ -152,13 +176,6 @@ const CallRoute = () => (
 const CommunityRoute = () => (
   <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
 );
-
-const renderScene = SceneMap({
-  community: CommunityRoute,
-  chat: ChatRoute,
-  update: UpdateRoute,
-  call: CallRoute,
-});
 
 const styles = StyleSheet.create({
   container: {
