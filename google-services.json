@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "888106005943",
+    "project_id": "practicepushnotification-b2b6e",
+    "storage_bucket": "practicepushnotification-b2b6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888106005943:android:cb5d1de2a1f06df3016432",
+        "android_client_info": {
+          "package_name": "com.nigam.whtsappui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLtDEGGR_-hn9xbMdDrJEu2ncCbjEzyn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,5 @@
 // import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   StatusBarStyle,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -17,7 +18,8 @@ import {
   MaterialCommunityIcons as ThirdIcon,
 } from "@expo/vector-icons";
 import colors from "./src/color.js";
-import color from "./src/color.js";
+import messaging from "@react-native-firebase/messaging";
+// import color from "./src/color.js";
 
 const BottomNavigator = createBottomTabNavigator();
 const width = Dimensions.get("window").width;
@@ -25,6 +27,47 @@ const width = Dimensions.get("window").width;
 export default function App() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
+
+  //PUSH NOTIFICATION CODE
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  }
+
+  useEffect(() => {
+    if (requestUserPermission()) {
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.log(token);
+        });
+    } else {
+      console.log("failed toekn", authStatus);
+    }
+
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          console.log("Notification caused", remoteMessage.notification);
+        }
+      });
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log("onNOtificationOpend");
+    });
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
+    });
+  }, []);
 
   return (
     <View
@@ -54,12 +97,20 @@ export default function App() {
           WhatsApp
         </Text>
         <View style={{ marginRight: 10, flexDirection: "row" }}>
-          <Icon
-            name="camera"
-            size={20}
-            style={{ marginRight: 24 }}
-            color={colors.mainTextColor}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              async () => {
+                await sendPushNotification(expoPushToken);
+              };
+            }}
+          >
+            <Icon
+              name="camera"
+              size={20}
+              style={{ marginRight: 24 }}
+              color={colors.mainTextColor}
+            />
+          </TouchableOpacity>
           <Icon
             name="search"
             size={20}
