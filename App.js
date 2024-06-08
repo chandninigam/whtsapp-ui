@@ -8,6 +8,7 @@ import {
   StatusBar,
   StatusBarStyle,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -20,7 +21,7 @@ import colors from "./src/color.js";
 import color from "./src/color.js";
 
 const BottomNavigator = createBottomTabNavigator();
-const width = Dimensions.get("window").width;
+const { width, height } = Dimensions.get("window");
 
 export default function App() {
   const layout = useWindowDimensions();
@@ -33,47 +34,57 @@ export default function App() {
         width: "100%",
       }}
     >
-      <StatusBar backgroundColor={colors.mainBackgroundColor} style="light" />
-      <View
+      <SafeAreaView
         style={{
-          height: layout.height / 14,
-          flexDirection: "row",
-          alignItems: "center",
+          flex: 0,
           backgroundColor: colors.mainBackgroundColor,
-          paddingLeft: 18,
+          height: height / 30,
         }}
-      >
-        <Text
+      />
+      {/* <StatusBar backgroundColor={colors.mainBackgroundColor} style="light" /> */}
+      <SafeAreaView>
+        <View
           style={{
-            flex: 1,
-            fontSize: 22,
-            color: colors.mainTextColor,
-            fontWeight: "400",
+            height: layout.height / 18,
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: colors.mainBackgroundColor,
+            paddingLeft: 18,
+            paddingBottom: 14,
           }}
         >
-          WhatsApp
-        </Text>
-        <View style={{ marginRight: 10, flexDirection: "row" }}>
-          <Icon
-            name="camera"
-            size={20}
-            style={{ marginRight: 24 }}
-            color={colors.mainTextColor}
-          />
-          <Icon
-            name="search"
-            size={20}
-            style={{ marginRight: 24 }}
-            color={colors.mainTextColor}
-          />
-          <Icon
-            name="more-vertical"
-            size={20}
-            color={colors.mainTextColor}
-            style={{ marginLeft: -4 }}
-          />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 24,
+              color: colors.mainTextColor,
+              fontWeight: "600",
+            }}
+          >
+            WhatsApp
+          </Text>
+          <View style={{ marginRight: 10, flexDirection: "row" }}>
+            <SecondIcon
+              name="qr-code-scanner"
+              size={24}
+              color={colors.mainTextColor}
+              style={{ marginRight: 24 }}
+            />
+            <Icon
+              name="camera"
+              size={24}
+              style={{ marginRight: 24 }}
+              color={colors.mainTextColor}
+            />
+            <Icon
+              name="more-vertical"
+              size={24}
+              color={colors.mainTextColor}
+              style={{ marginLeft: -4 }}
+            />
+          </View>
         </View>
-      </View>
+      </SafeAreaView>
       <RenderTabBar />
     </View>
   );
